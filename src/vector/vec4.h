@@ -15,19 +15,6 @@
 #include "vec3.h"
 
 /**
- * Returns a pointer to a compound literal cgm_vec4.
- * This should be primarily used as a function parameter
- * when one wants to avoid creating a new variable.
- * To set the values of a cgm_vec4, cgm_vec4_set() should be used instead.
- * @param X - x coordinate.
- * @param Y - y coordinate.
- * @param Z - z coordinate.
- * @param W - w coordinate.
- * @return Pointer to the vector.
- */
-#define VEC4(X, Y, Z, W)  ((const cgm_vec4*) &((cgm_vec4) {{(X), (Y), (Z), (W)}}))
-
-/**
  * A 4-dimensional vector with float components.
  * (Do you think there might be too many unions here? Nah...)
  */
@@ -137,6 +124,19 @@ typedef union cgm_vec4 {
 } cgm_vec4;
 
 /**
+ * Returns a pointer to a compound literal cgm_vec4.
+ * This should be primarily used as a function parameter
+ * when one wants to avoid creating a new variable.
+ * To set the values of a cgm_vec4, cgm_vec4_set() should be used instead.
+ * @param X - x coordinate.
+ * @param Y - y coordinate.
+ * @param Z - z coordinate.
+ * @param W - w coordinate.
+ * @return Pointer to the vector.
+ */
+#define CGM_VEC4(X, Y, Z, W)  ((const cgm_vec4*) &((cgm_vec4) {{(X), (Y), (Z), (W)}}))
+
+/**
  * Sets the components of a cgm_vec4.
  * @param v - Vector to set.
  * @param x - x coordinate.
@@ -144,7 +144,7 @@ typedef union cgm_vec4 {
  * @param z - z coordinate.
  * @param w - w coordinate.
  */
-inline void cgm_vec4_set(cgm_vec4* v, float x, float y, float z, float w);
+void cgm_vec4_set(cgm_vec4* v, float x, float y, float z, float w);
 
 /**
  * Sets the components of a cgm_vec4 from a cgm_vec2 and z and w coordinates
@@ -153,7 +153,7 @@ inline void cgm_vec4_set(cgm_vec4* v, float x, float y, float z, float w);
  * @param z - z coordinate.
  * @param w - w coordinate.
  */
-inline void cgm_vec4_set_v2(cgm_vec4* v, const cgm_vec2* xy, float z, float w);
+void cgm_vec4_set_v2(cgm_vec4* v, const cgm_vec2* xy, float z, float w);
 
 /**
  * Sets the components of a cgm_vec4 from a cgm_vec3 and a w coordinate
@@ -161,14 +161,14 @@ inline void cgm_vec4_set_v2(cgm_vec4* v, const cgm_vec2* xy, float z, float w);
  * @param xyz - Vector with x, y, and z coordinates.
  * @param w - w coordinate.
  */
-inline void cgm_vec4_set_v3(cgm_vec4* v, const cgm_vec3* xyz, float w);
+void cgm_vec4_set_v3(cgm_vec4* v, const cgm_vec3* xyz, float w);
 
 /**
  * Fills all components of a cgm_vec4 with a value.
  * @param v - Vector to fill.
  * @param val - Value to fill with.
  */
-inline inline void cgm_vec4_fill(cgm_vec4* v, float val);
+void cgm_vec4_fill(cgm_vec4* v, float val);
 
 /**
  * Copies a vector into another.
@@ -176,7 +176,7 @@ inline inline void cgm_vec4_fill(cgm_vec4* v, float val);
  * @parm src - Source vector.
  * @return dest.
  */
-inline cgm_vec4* cgm_vec4_cpy(cgm_vec4* dest, const cgm_vec4* src);
+cgm_vec4* cgm_vec4_cpy(cgm_vec4* dest, const cgm_vec4* src);
 
 /**
  * Tests if two cgm_vec4's are equal.
@@ -186,28 +186,28 @@ inline cgm_vec4* cgm_vec4_cpy(cgm_vec4* dest, const cgm_vec4* src);
  * @param v - Second vector.
  * @return true (1) if u = v; false (0) otherwise.
  */
-inline int cgm_vec4_equals(const cgm_vec4* u, const cgm_vec4* v);
+bool cgm_vec4_equals(const cgm_vec4* u, const cgm_vec4* v);
 
 /**
  * Adds a value to each component of the vector.
  * @param v - Vector to add to.
  * @param n - Value to add.
  */
-inline void cgm_vec4_nadd(cgm_vec4* v, float n);
+void cgm_vec4_nadd(cgm_vec4* v, float n);
 
 /**
  * Adds two cgm_vec4's component-wise.
  * @param u - Vector to add to.
  * @param v - Vector to add.
  */
-inline void cgm_vec4_add(cgm_vec4* u, const cgm_vec4* v);
+void cgm_vec4_add(cgm_vec4* u, const cgm_vec4* v);
 
 /**
  * Subtracts two cgm_vec4's component-wise.
  * @param u - Vector to subtract from.
  * @param v - Vector to subtract.
  */
-inline void cgm_vec4_sub(cgm_vec4* u, const cgm_vec4* v);
+void cgm_vec4_sub(cgm_vec4* u, const cgm_vec4* v);
 
 /**
  * Calculates the dot product of two cgm_vec4's.
@@ -215,21 +215,21 @@ inline void cgm_vec4_sub(cgm_vec4* u, const cgm_vec4* v);
  * @param v - Second vector.
  * @return Dot product u . v.
  */
-inline float cgm_vec4_dot(const cgm_vec4* u, const cgm_vec4* v);
+float cgm_vec4_dot(const cgm_vec4* u, const cgm_vec4* v);
 
 /**
  * Multiplies a cgm_vec4 by a scalar.
  * @param v - Vector to scale.
  * @param val - Scale factor.
  */
-inline void cgm_vec4_scal(cgm_vec4* v, float val);
+void cgm_vec4_scal(cgm_vec4* v, float val);
 
 /**
  * Returns the magnitude of a cgm_vec4.
  * @param v - Vector to take the magnitude of.
  * @return Magnitude ||v||.
  */
-inline float cgm_vec4_mag(const cgm_vec4* v);
+float cgm_vec4_mag(const cgm_vec4* v);
 
 /**
  * Normalizes a cgm_vec4.
@@ -237,7 +237,7 @@ inline float cgm_vec4_mag(const cgm_vec4* v);
  * direction as before.
  * @param v - Vector to normalize.
  */
-inline void cgm_vec4_norm(cgm_vec4* v);
+void cgm_vec4_norm(cgm_vec4* v);
 
 /**
  * Prints a cgm_vec4 to a stream.
@@ -246,7 +246,7 @@ inline void cgm_vec4_norm(cgm_vec4* v);
  * @param v - Vector to print.
  * @return The number of characters printed.
  */
-inline int cgm_vec4_fprintf(FILE* stream, const cgm_vec4* v);
+int cgm_vec4_fprintf(FILE* stream, const cgm_vec4* v);
 
 /**
  * Prints a cgm_vec4 to stdout.
@@ -254,95 +254,8 @@ inline int cgm_vec4_fprintf(FILE* stream, const cgm_vec4* v);
  * @param v - Vector to print.
  * @return The number of characters printed.
  */
-inline inline int cgm_vec4_printf(const cgm_vec4* v);
-
-
-/* INLINE DECLARATIONS */
-
-
-inline void cgm_vec4_set(cgm_vec4* v, float x, float y, float z, float w) {
-    v->x = x;
-    v->y = y;
-    v->z = z;
-    v->w = w;
-}
-
-inline void cgm_vec4_set_v2(cgm_vec4* v, const cgm_vec2* xy, float z, float w) {
-    memcpy(v, xy, sizeof(cgm_vec2));
-    v->z = z;
-    v->w = w;
-}
-
-inline void cgm_vec4_set_v3(cgm_vec4* v, const cgm_vec3* xyz, float w) {
-    memcpy(v, xyz, sizeof(cgm_vec3));
-    v->w = w;
-}
-
-inline void cgm_vec4_fill(cgm_vec4* v, float val) {
-    cgm_vec4_set(v, val, val, val, val);
-}
-
-inline cgm_vec4* cgm_vec4_cpy(cgm_vec4* dest, const cgm_vec4* src) {
-    return memcpy(dest, src, sizeof(cgm_vec4));
-}
-
-inline int cgm_vec4_equals(const cgm_vec4* u, const cgm_vec4* v) {
-    /*
-     * memcmp() is not sufficient because floating point values are not
-     * one-to-one.
-     */
-    return u->x == v->x && u->y == v->y && u->z == v->z && u->w == v->w;
-}
-
-inline void cgm_vec4_nadd(cgm_vec4* v, float n) {
-    v->x += n;
-    v->y += n;
-    v->z += n;
-    v->w += n;
-}
-
-inline void cgm_vec4_add(cgm_vec4* u, const cgm_vec4* v) {
-    u->x += v->x;
-    u->y += v->y;
-    u->z += v->z;
-    u->w += v->w;
-}
-
-inline void cgm_vec4_sub(cgm_vec4* u, const cgm_vec4* v) {
-    u->x -= v->x;
-    u->y -= v->y;
-    u->z -= v->z;
-    u->w -= v->w;
-}
-
-inline float cgm_vec4_dot(const cgm_vec4* u, const cgm_vec4* v) {
-    return u->x * v->x + u->y * v->y + u->z * v->z + u->w * v->w;
-}
-
-inline void cgm_vec4_scal(cgm_vec4* v, float val) {
-    v->x *= val;
-    v->y *= val;
-    v->z *= val;
-    v->w *= val;
-}
-
-inline float cgm_vec4_mag(const cgm_vec4* v) {
-    return sqrtf(cgm_vec4_dot(v, v));
-}
-
-inline void cgm_vec4_norm(cgm_vec4* v) {
-    float mag = cgm_vec4_mag(v);
-    if (mag != 0) {
-        cgm_vec4_scal(v, 1 / mag);
-    }
-}
-
-inline int cgm_vec4_fprintf(FILE* stream, const cgm_vec4* v) {
-    return fprintf(stream, "(%g, %g, %g, %g)\n", v->x, v->y, v->z, v->w);
-}
-
-inline int cgm_vec4_printf(const cgm_vec4* v) {
-    return cgm_vec4_fprintf(stdout, v);
-}
+int cgm_vec4_printf(const cgm_vec4* v);
 
 #endif /* VEC4_H_ */
+
+/* vim: set ft=c: */

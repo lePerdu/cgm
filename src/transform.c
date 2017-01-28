@@ -3,12 +3,14 @@
  *
  * Copyright (c) 2016 Zach Peltzer.
  * Subject to the MIT License.
+ *
+ * Inline definitions for transform.h.
  */
 
 #include <math.h>
 
-#include "mat4.h"
-#include "vec3.h"
+#include "vector/vec3.h"
+#include "matrix/mat4.h"
 #include "transform.h"
 
 void cgm_set_ortho(
@@ -16,8 +18,7 @@ void cgm_set_ortho(
         float left, float right,
         float bottom, float top,
         float near, float far) {
-    if (!m ||
-            right <= left ||
+    if (right <= left ||
             top   <= bottom ||
             far   <= near) {
         return;
@@ -39,8 +40,7 @@ void cgm_ortho(
         float left, float right,
         float bottom, float top,
         float near, float far) {
-    if (!m ||
-            right <= left ||
+    if (right <= left ||
             top   <= bottom ||
             far   <= near) {
         return;
@@ -56,8 +56,7 @@ void cgm_set_frustum(
         float left, float right,
         float bottom, float top,
         float near, float far) {
-    if (!m ||
-            right <= left ||
+    if (right <= left ||
             top   <= bottom ||
             far   <= near) {
         return;
@@ -80,8 +79,7 @@ void cgm_frustum(
         float left, float right,
         float bottom, float top,
         float near, float far) {
-    if (!m ||
-            right <= left ||
+    if (right <= left ||
             top   <= bottom ||
             far   <= near) {
         return;
@@ -96,8 +94,7 @@ void cgm_set_perspective(
         cgm_mat4* m,
         float fov_y, float aspect,
         float near, float far) {
-    if (!m ||
-            fov_y < 0 || fov_y > M_PI ||
+    if (fov_y < 0 || fov_y > M_PI ||
             aspect < 0 ||
             far <= near) {
         return;
@@ -112,8 +109,7 @@ void cgm_perspective(
         cgm_mat4* m,
         float fov_y, float aspect,
         float near, float far) {
-    if (!m ||
-            fov_y < 0 || fov_y > M_PI ||
+    if (fov_y < 0 || fov_y > M_PI ||
             aspect < 0 ||
             far <= near) {
         return;
@@ -129,10 +125,6 @@ void cgm_set_lookat(
         const cgm_vec3* eye,
         const cgm_vec3* center,
         const cgm_vec3* up) {
-    if (!m || !eye || !center || !up) {
-        return;
-    }
-
     cgm_vec3 f, u, s;
 
     cgm_vec3_cpy(&f, center);
@@ -163,20 +155,12 @@ void cgm_lookat(
         const cgm_vec3* eye,
         const cgm_vec3* center,
         const cgm_vec3* up) {
-    if (!m || !eye || !center || !up) {
-        return;
-    }
-
     cgm_mat4 lookat;
     cgm_set_lookat(&lookat, eye, center, up);
     cgm_mat4_mul_l(m, &lookat);
 }
 
 void cgm_set_translate(cgm_mat4* m, float x, float y, float z) {
-    if (!m) {
-        return;
-    }
-
     cgm_mat4_set_identity(m);
 
     m->m[3][0] = x;
@@ -185,20 +169,12 @@ void cgm_set_translate(cgm_mat4* m, float x, float y, float z) {
 }
 
 void cgm_translate(cgm_mat4* m, float x, float y, float z) {
-    if (!m) {
-        return;
-    }
-
     cgm_mat4 translate;
     cgm_set_translate(&translate, x, y, z);
     cgm_mat4_mul_l(m, &translate);
 }
 
 void cgm_set_scale(cgm_mat4* m, float x, float y, float z) {
-    if (!m) {
-        return;
-    }
-
     cgm_mat4_set_identity(m);
 
     m->m[0][0] = x;
@@ -207,20 +183,12 @@ void cgm_set_scale(cgm_mat4* m, float x, float y, float z) {
 }
 
 void cgm_scale(cgm_mat4* m, float x, float y, float z) {
-    if (!m) {
-        return;
-    }
-
     cgm_mat4 scale;
     cgm_set_scale(&scale, x, y, z);
     cgm_mat4_mul_l(m, &scale);
 }
 
 void cgm_set_rotate_x(cgm_mat4* m, float ang) {
-    if (!m) {
-        return;
-    }
-
     float s = sinf(ang);
     float c = cosf(ang);
 
@@ -232,20 +200,12 @@ void cgm_set_rotate_x(cgm_mat4* m, float ang) {
 }
 
 void cgm_rotate_x(cgm_mat4* m, float ang) {
-    if (!m) {
-        return;
-    }
-
     cgm_mat4 rotate;
     cgm_rotate_x(&rotate, ang);
     cgm_mat4_mul_l(m, &rotate);
 }
 
 void cgm_set_rotate_y(cgm_mat4* m, float ang) {
-    if (!m) {
-        return;
-    }
-
     float s = sinf(ang);
     float c = cosf(ang);
 
@@ -257,20 +217,12 @@ void cgm_set_rotate_y(cgm_mat4* m, float ang) {
 }
 
 void cgm_rotate_y(cgm_mat4* m, float ang) {
-    if (!m) {
-        return;
-    }
-
     cgm_mat4 rotate;
     cgm_rotate_y(&rotate, ang);
     cgm_mat4_mul_l(m, &rotate);
 }
 
 void cgm_set_rotate_z(cgm_mat4* m, float ang) {
-    if (!m) {
-        return;
-    }
-
     float s = sinf(ang);
     float c = cosf(ang);
 
@@ -282,20 +234,12 @@ void cgm_set_rotate_z(cgm_mat4* m, float ang) {
 }
 
 void cgm_rotate_z(cgm_mat4* m, float ang) {
-    if (!m) {
-        return;
-    }
-
     cgm_mat4 rotate;
     cgm_rotate_z(&rotate, ang);
     cgm_mat4_mul_l(m, &rotate);
 }
 
 void cgm_set_rotate(cgm_mat4* m, const cgm_vec3* axis, float ang) {
-    if (!m || !axis) {
-        return;
-    }
-
     float mag = cgm_vec3_mag(axis);
     if (mag == 0) {
         return;
@@ -323,12 +267,9 @@ void cgm_set_rotate(cgm_mat4* m, const cgm_vec3* axis, float ang) {
 }
 
 void cgm_rotate(cgm_mat4* m, const cgm_vec3* axis, float ang) {
-    if (!m || !axis) {
-        return;
-    }
-
     cgm_mat4 rotate;
     cgm_set_rotate(&rotate, axis, ang);
     cgm_mat4_mul_l(m, &rotate);
 }
 
+/* vim: set ft=c: */

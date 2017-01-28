@@ -6,7 +6,6 @@
  */
 
 #include <math.h>
-#include <stdbool.h>
 #include <stdio.h>
 #include <string.h>
 
@@ -19,6 +18,10 @@ void cgm_vec3_set(cgm_vec3* v, float x, float y, float z) {
     v->z = z;
 }
 
+void cgm_vec3_fill(cgm_vec3* v, float val) {
+    cgm_vec3_set(v, val, val, val);
+}
+
 void cgm_vec3_set_v2(cgm_vec3* v, const cgm_vec2* xy, float z) {
     memcpy(v, xy, sizeof(cgm_vec2));
     v->z = z;
@@ -28,7 +31,7 @@ cgm_vec3* cgm_vec3_cpy(cgm_vec3* dest, const cgm_vec3* src) {
     return memcpy(dest, src, sizeof(cgm_vec3));
 }
 
-int cgm_vec3_equals(const cgm_vec3* u, const cgm_vec3* v) {
+bool cgm_vec3_equals(const cgm_vec3* u, const cgm_vec3* v) {
     return u->x == v->x && u->y == v->y && u->z == v->z;
 }
 
@@ -82,3 +85,8 @@ int cgm_vec3_fprintf(FILE* stream, const cgm_vec3* v) {
     return fprintf(stream, "(%g, %g, %g)\n", v->x, v->y, v->z);
 }
 
+int cgm_vec3_printf(const cgm_vec3* v) {
+    return cgm_vec3_fprintf(stdout, v);
+}
+
+/* vim: set ft=c: */

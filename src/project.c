@@ -3,10 +3,12 @@
  *
  * Copyright (c) 2016 Zach Peltzer.
  * Subject to the MIT License.
+ *
+ * Inline funciton definitions for project.h.
  */
 
-#include "vec3.h"
-#include "mat4.h"
+#include "vector/vec3.h"
+#include "matrix/mat4.h"
 #include "project.h"
 
 void cgm_project(
@@ -56,3 +58,4 @@ void cgm_unproject(
     cgm_vec3_scal(vertex, 1 / out.w);
 }
 
+/* vim: set ft=c: */

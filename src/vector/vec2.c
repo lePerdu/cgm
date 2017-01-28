@@ -16,11 +16,15 @@ void cgm_vec2_set(cgm_vec2* v, float x, float y) {
     v->y = y;
 }
 
+void cgm_vec2_fill(cgm_vec2* v, float val) {
+    cgm_vec2_set(v, val, val);
+}
+
 cgm_vec2* cgm_vec2_cpy(cgm_vec2* dest, const cgm_vec2* src) {
     return memcpy(dest, src, sizeof(cgm_vec2));
 }
 
-int cgm_vec2_equals(const cgm_vec2* u, const cgm_vec2* v) {
+bool cgm_vec2_equals(const cgm_vec2* u, const cgm_vec2* v) {
     return u->x == v->x && u->y == v->y;
 }
 
@@ -60,3 +64,8 @@ int cgm_vec2_fprintf(FILE* stream, const cgm_vec2* v) {
     return fprintf(stream, "(%g, %g)\n", v->x, v->y);
 }
 
+int cgm_vec2_printf(const cgm_vec2* v) {
+    return cgm_vec2_fprintf(stdout, v);
+}
+
+/* vim: set ft=c: */

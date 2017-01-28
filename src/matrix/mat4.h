@@ -10,8 +10,10 @@
 
 #include <stdio.h>
 
-#include "vec3.h"
-#include "vec4.h"
+#include "mat3.h"
+#include "../vector/vec3.h"
+#include "../vector/vec4.h"
+#include "../quaternion/quaternion.h"
 
 /**
  * A 4x4 matrix with float elements.
@@ -38,13 +40,28 @@ typedef union cgm_mat4 {
  * @param m - Matrix to fill.
  * @param val - Value to fill with.
  */
-inline void cgm_mat4_fill(cgm_mat4* m, float val);
+void cgm_mat4_fill(cgm_mat4* m, float val);
+
+/**
+ * Sets the upper left of a cgm_mat4 with a cgm_mat3 and the rest of it
+ * as in an identity matrix.
+ * @param m - Matrix to set.
+ * @param m3 - Matrix from which to set.
+ */
+void cgm_mat4_set_m3(cgm_mat4* m, const cgm_mat3* m3);
+
+/**
+ * Sets a cgm_mat4 to represent the same rotation as a cgm_quat.
+ * @param m - Matrix to set.
+ * @param q - Quaternion from which to set.
+ */
+void cgm_mat4_set_quat(cgm_mat4* m, const cgm_quat* q);
 
 /**
  * Sets a cgm_mat4 to an identity matrix.
  * @param m - Matrix to set.
  */
-inline void cgm_mat4_set_identity(cgm_mat4* m);
+void cgm_mat4_set_identity(cgm_mat4* m);
 
 /**
  * Copies a matrix into another.
@@ -52,7 +69,7 @@ inline void cgm_mat4_set_identity(cgm_mat4* m);
  * @param src - Source matrix.
  * @return dest.
  */
-inline cgm_mat4* cgm_mat4_cpy(cgm_mat4* dest, const cgm_mat4* src);
+cgm_mat4* cgm_mat4_cpy(cgm_mat4* dest, const cgm_mat4* src);
 
 /**
  * Tests if two cgm_mat4's are equal.
@@ -61,28 +78,28 @@ inline cgm_mat4* cgm_mat4_cpy(cgm_mat4* dest, const cgm_mat4* src);
  * @param b - Second matrix.
  * @return true (1) if a = b; false (0) otherwise.
  */
-inline int cgm_mat4_equals(const cgm_mat4* a, const cgm_mat4* b);
+bool cgm_mat4_equals(const cgm_mat4* a, const cgm_mat4* b);
 
 /**
  * Adds two cgm_mat4's element-wise.
  * @param a - Matrix to add to.
  * @param b - Matrix to add.
  */
-inline void cgm_mat4_add(cgm_mat4* a, const cgm_mat4* b);
+void cgm_mat4_add(cgm_mat4* a, const cgm_mat4* b);
 
 /**
  * Subtracts two cgm_mat4's element-wise.
  * @param a - Matrix to subtract from.
  * @param b - Matrix to subtract.
  */
-inline void cgm_mat4_sub(cgm_mat4* a, const cgm_mat4* b);
+void cgm_mat4_sub(cgm_mat4* a, const cgm_mat4* b);
 
 /**
  * Scales each element of a matrix.
  * @param m - Matrix to scale.
  * @param val - Value to scale each element.
  */
-inline void cgm_mat4_scal(cgm_mat4* m, float val);
+void cgm_mat4_scal(cgm_mat4* m, float val);
 
 /**
  * Multiples two cgm_mat4's.
@@ -90,48 +107,55 @@ inline void cgm_mat4_scal(cgm_mat4* m, float val);
  * @param a - Matrix to multiply on the left.
  * @param b - Matrix to multiply on the right.
  */
-inline void cgm_mat4_mul(cgm_mat4* out, const cgm_mat4* a, const cgm_mat4* b);
+void cgm_mat4_mul(cgm_mat4* out, const cgm_mat4* a, const cgm_mat4* b);
 
 /**
  * Multiplies two cgm_mat4's.
  * @param a - Matrix to multiply on the left and store the result.
  * @param b - Matrix to multiply on the right.
  */
-inline void cgm_mat4_mul_l(cgm_mat4* a, const cgm_mat4* b);
+void cgm_mat4_mul_l(cgm_mat4* a, const cgm_mat4* b);
 
 /**
  * Multiplies two cgm_mat4's.
  * @param a - Matrix to multiply on the left.
  * @param b - Matrix to multiply on the right and store the result.
  */
-inline void cgm_mat4_mul_r(const cgm_mat4* a, cgm_mat4* b);
+void cgm_mat4_mul_r(const cgm_mat4* a, cgm_mat4* b);
 
 /**
  * Multiples a cgm_vec3 by a cgm_mat4 by assigning a w component of 1.
  * @param m - Matrix to multiply by (on the left).
  * @param v - Vector to multiply (on the right).
  */
-inline void cgm_mat4_mul_v3(const cgm_mat4* m, cgm_vec3* v);
+void cgm_mat4_mul_v3(const cgm_mat4* m, cgm_vec3* v);
 
 /**
  * Multiplies a cgm_vec4 by a cgm_mat4.
  * @param m - Matrix to multiply by (on the left).
  * @param v - Vector to multiply (on the right).
  */
-inline void cgm_mat4_mul_v4(const cgm_mat4* m, cgm_vec4* v);
+void cgm_mat4_mul_v4(const cgm_mat4* m, cgm_vec4* v);
+
+/**
+ * Applies the rotation from a cgm_quat to a cgm_mat4.
+ * @param m - Matrix to rotate.
+ * @param q - Quaternion by which to rotate by.
+ */
+void cgm_mat4_mul_quat(cgm_mat4* m, const cgm_quat* q);
 
 /**
  * Calculates the determinant of a cgm_mat4.
  * @param m - Matrix to take the determinant of.
  * @return Determinant |m|.
  */
-inline float cgm_mat4_det(const cgm_mat4* m);
+float cgm_mat4_det(const cgm_mat4* m);
 
 /**
  * Transposes a cgm_mat4.
  * @param m - Matrix to transpose.
  */
-inline void cgm_mat4_transpose(cgm_mat4* m);
+void cgm_mat4_transpose(cgm_mat4* m);
 
 /**
  * Inverts a cgm_mat4.
@@ -140,7 +164,7 @@ inline void cgm_mat4_transpose(cgm_mat4* m);
  * @param m - Matrix to invert.
  * @return true (1) if the matrix could be inverted; false (0) otherwise.
  */
-inline int cgm_mat4_invert(cgm_mat4* m);
+int cgm_mat4_invert(cgm_mat4* m);
 
 /**
  * Prints a cgm_mat4 to a stream.
@@ -154,7 +178,7 @@ inline int cgm_mat4_invert(cgm_mat4* m);
  * @param m - Matrix to print.
  * @return The number of characters printed.
  */
-inline int cgm_mat4_fprintf(FILE* stream, const cgm_mat4* m);
+int cgm_mat4_fprintf(FILE* stream, const cgm_mat4* m);
 
 /**
  * Prints a cmg_mat4 to stdout.
@@ -162,9 +186,7 @@ inline int cgm_mat4_fprintf(FILE* stream, const cgm_mat4* m);
  * @param m - Matrix to print.
  * @return The number of characters printed.
  */
-inline int cgm_mat4_printf(const cgm_mat4* m);
-
-#include "mat4.inl"
+int cgm_mat4_printf(const cgm_mat4* m);
 
 #endif /* MAT4_H_ */
 

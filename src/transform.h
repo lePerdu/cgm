@@ -10,8 +10,8 @@
 #ifndef TRANSFORM_H_
 #define TRANSFORM_H_
 
-#include "vec3.h"
-#include "mat4.h"
+#include "vector/vec3.h"
+#include "matrix/mat4.h"
 
 /**
  * Sets a matrix to an orthographic projection matrix
@@ -224,8 +224,6 @@ void cgm_set_rotate(cgm_mat4* m, const cgm_vec3* axis, float angle);
  * @param angle - Angle to rotate (counter-clockwise) in radians.
  */
 void cgm_rotate(cgm_mat4* m, const cgm_vec3* axis, float angle);
-
-#include "transform.inl"
 
 #endif /* TRANSFORM_H_ */
 

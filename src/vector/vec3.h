@@ -17,18 +17,6 @@
 #include "vec2.h"
 
 /**
- * Returns a pointer to a compound literal cgm_vec3.
- * This should be primarily used as a function parameter
- * when one wants to avoid creating a new variable.
- * To set the values of a cgm_vec3, cgm_vec3_set() should be used instead.
- * @param X - x coordinate.
- * @param Y - y coordinate.
- * @param Z - z coordinate.
- * @return Pointer to the vector.
- */
-#define VEC3(X, Y, Z)  ((const cgm_vec3*) &((cgm_vec3) {{(X), (Y), (Z)}}))
-
-/**
  * A 3-dimensional vector with float components.
  */
 typedef union cgm_vec3 {
@@ -77,13 +65,25 @@ typedef union cgm_vec3 {
 } cgm_vec3;
 
 /**
+ * Returns a pointer to a compound literal cgm_vec3.
+ * This should be primarily used as a function parameter
+ * when one wants to avoid creating a new variable.
+ * To set the values of a cgm_vec3, cgm_vec3_set() should be used instead.
+ * @param X - x coordinate.
+ * @param Y - y coordinate.
+ * @param Z - z coordinate.
+ * @return Pointer to the vector.
+ */
+#define CGM_VEC3(X, Y, Z)  ((const cgm_vec3*) &((cgm_vec3) {{(X), (Y), (Z)}}))
+
+/**
  * Sets the components of a cgm_vec3.
  * @param v - Vector to set.
  * @param x - x coordinate.
  * @param y - y coordinate.
  * @param z - z coordinate.
  */
-inline void cgm_vec3_set(cgm_vec3* v, float x, float y, float z);
+void cgm_vec3_set(cgm_vec3* v, float x, float y, float z);
 
 /**
  * Sets the components of a cgm_vec3 from a cgm_vec2 and a z-coordinate.
@@ -91,14 +91,14 @@ inline void cgm_vec3_set(cgm_vec3* v, float x, float y, float z);
  * @param xy - cgm_vec2 with x and y coordinates.
  * @param z - z coordinate.
  */
-inline void cgm_vec3_set_v2(cgm_vec3* v, const cgm_vec2* xy, float z);
+void cgm_vec3_set_v2(cgm_vec3* v, const cgm_vec2* xy, float z);
 
 /**
  * Fills all components of a cgm_vec3 with a value.
  * @param v - Vector to fill.
  * @param val - Value to fill with.
  */
-inline void cgm_vec3_fill(cgm_vec3* v, float val);
+void cgm_vec3_fill(cgm_vec3* v, float val);
 
 /**
  * Copies src into dest.
@@ -106,7 +106,7 @@ inline void cgm_vec3_fill(cgm_vec3* v, float val);
  * @param src - Srouce vector.
  * @return dest.
  */
-inline cgm_vec3* cgm_vec3_cpy(cgm_vec3* dest, const cgm_vec3* src);
+cgm_vec3* cgm_vec3_cpy(cgm_vec3* dest, const cgm_vec3* src);
 
 /**
  * Tests if two cgm_vec3's are equal.
@@ -116,28 +116,28 @@ inline cgm_vec3* cgm_vec3_cpy(cgm_vec3* dest, const cgm_vec3* src);
  * @param v - Second vector.
  * @return true (1) if u = v; false (0) otherwise.
  */
-inline int cgm_vec3_equals(const cgm_vec3* u, const cgm_vec3* v);
+bool cgm_vec3_equals(const cgm_vec3* u, const cgm_vec3* v);
 
 /**
  * Adds a value to each component of the vector.
  * @param v - Vector to add to.
  * @param n - Value to add.
  */
-inline void cgm_vec3_nadd(cgm_vec3* v, float n);
+void cgm_vec3_nadd(cgm_vec3* v, float n);
 
 /**
  * Adds two cgm_vec3's component-wise.
  * @param u - Vector to add to.
  * @param v - Vector to add.
  */
-inline void cgm_vec3_add(cgm_vec3* u, const cgm_vec3* v);
+void cgm_vec3_add(cgm_vec3* u, const cgm_vec3* v);
 
 /**
  * Subtracts two cgm_vec3's component-wise.
  * @param u - Vector to subtract from.
  * @param v - Vector to subtract.
  */
-inline void cgm_vec3_sub(cgm_vec3* u, const cgm_vec3* v);
+void cgm_vec3_sub(cgm_vec3* u, const cgm_vec3* v);
 
 /**
  * Calculates the dot product of two cgm_vec3's.
@@ -145,21 +145,21 @@ inline void cgm_vec3_sub(cgm_vec3* u, const cgm_vec3* v);
  * @param v - Second vector.
  * @return The dot product u . v.
  */
-inline float cgm_vec3_dot(const cgm_vec3* u, const cgm_vec3* v);
+float cgm_vec3_dot(const cgm_vec3* u, const cgm_vec3* v);
 
 /**
  * Multiplies a cgm_vec3 by a scalar.
  * @param v - Vector to scale.
  * @param val - Scale factor.
  */
-inline void cgm_vec3_scal(cgm_vec3* v, float val);
+void cgm_vec3_scal(cgm_vec3* v, float val);
 
 /**
  * Returns the magnitude of a cgm_vec3.
  * @param v - Vector to take the magnitude of.
  * @return Magnitude ||v||.
  */
-inline float cgm_vec3_mag(const cgm_vec3* v);
+float cgm_vec3_mag(const cgm_vec3* v);
 
 /**
  * Normalizes a cgm_vec3.
@@ -167,7 +167,7 @@ inline float cgm_vec3_mag(const cgm_vec3* v);
  * direction as before.
  * @param v - The vector to normalize.
  */
-inline void cgm_vec3_norm(cgm_vec3* v);
+void cgm_vec3_norm(cgm_vec3* v);
 
 /**
  * Calculates the cross product of two cgm_vec3's.
@@ -177,7 +177,7 @@ inline void cgm_vec3_norm(cgm_vec3* v);
  * @param u - First vector to cross.
  * @param v - Second vector to cross.
  */
-inline void cgm_vec3_cross(cgm_vec3* out, const cgm_vec3* u, const cgm_vec3* v);
+void cgm_vec3_cross(cgm_vec3* out, const cgm_vec3* u, const cgm_vec3* v);
 
 /**
  * Prints a cgm_vec3 to a stream.
@@ -186,7 +186,7 @@ inline void cgm_vec3_cross(cgm_vec3* out, const cgm_vec3* u, const cgm_vec3* v);
  * @param v - Vector to print.
  * @return The number of characters printed.
  */
-inline int cgm_vec3_fprintf(FILE* stream, const cgm_vec3* v);
+int cgm_vec3_fprintf(FILE* stream, const cgm_vec3* v);
 
 /**
  * Prints a cgm_vec3 to stdout.
@@ -194,9 +194,7 @@ inline int cgm_vec3_fprintf(FILE* stream, const cgm_vec3* v);
  * @param v - Vector to print.
  * @return The number of characters printed.
  */
-inline int cgm_vec3_printf(const cgm_vec3* v);
-
-#include "vec3.inl"
+int cgm_vec3_printf(const cgm_vec3* v);
 
 #endif /* VEC3_H_ */
 

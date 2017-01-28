@@ -5,17 +5,20 @@
 # Subject to the MIT License.
 #
 
-include_directories(".")
+set(HEADERS "transform.h" "project.h" "cgm.h")
 
-set(HEADERS "vec2.h" "vec3.h" "vec4.h"
-    "mat2.h" "mat3.h" "mat4.h"
-    "transform.h" "project.h" "cgm.h")
+set(SOURCES "transform.c" "project.c")
 
-set(SOURCES "vec2.inl" "vec3.inl" "vec4.inl"
-    "mat2.inl" "mat3.inl" "mat4.inl"
-    "transform.inl" "project.inl")
-
+set(CGM_LIBRARY "cgm")
 set(CGM_INCLUDE_DIR "include/cgm")
 
-install(FILES ${HEADERS} ${SOURCES} DESTINATION ${CGM_INCLUDE_DIR})
+add_subdirectory("vector")
+add_subdirectory("matrix")
+add_subdirectory("quaternion")
+
+add_library(${CGM_LIBRARY} SHARED ${SOURCES} ${HEADERS})
+target_link_libraries(${CGM_LIBRARY} "m")
+
+install(TARGETS ${CGM_LIBRARY} DESTINATION "lib")
+install(FILES ${HEADERS} DESTINATION ${CGM_INCLUDE_DIR})
 

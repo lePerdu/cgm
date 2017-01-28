@@ -1,5 +1,5 @@
 /**
- * mat4.inl
+ * mat4.c
  *
  * Copyright (c) 2016 Zach Peltzer.
  * Subject to the MIT License.
@@ -10,16 +10,56 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "vec3.h"
-#include "vec4.h"
+#include "../vector/vec3.h"
+#include "../vector/vec4.h"
+#include "mat4.h"
 
-inline void cgm_mat4_fill(cgm_mat4* m, float val) {
+void cgm_mat4_fill(cgm_mat4* m, float val) {
     for (int i = 0; i < 16; i++) {
         m->arr[i] = val;
     }
 }
 
-inline void cgm_mat4_set_identity(cgm_mat4* m) {
+void cgm_mat4_set_m3(cgm_mat4* m, const cgm_mat3* m3) {
+    cgm_vec4_set_v3(&m->vec[0], &m3->vec[0], 0.0F);
+    cgm_vec4_set_v3(&m->vec[1], &m3->vec[1], 0.0F);
+    cgm_vec4_set_v3(&m->vec[2], &m3->vec[2], 0.0F);
+    cgm_vec4_set(&m->vec[3], 0.0F, 0.0F, 0.0F, 1.0F);
+}
+
+void cgm_mat4_set_quat(cgm_mat4* m, const cgm_quat* q) {
+    float xx = q->x * q->x;
+    float yy = q->y * q->y;
+    float zz = q->z * q->z;
+    float xz = q->x * q->z;
+    float xy = q->x * q->y;
+    float yz = q->y * q->z;
+    float wx = q->w * q->x;
+    float wy = q->w * q->y;
+    float wz = q->w * q->z;
+
+    m->m[0][0] = 1.0F - 2.0F * (yy +  zz);
+    m->m[0][1] = 2.0F * (xy + wz);
+    m->m[0][2] = 2.0F * (xz - wy);
+    m->m[0][3] = 0.0F;
+
+    m->m[1][0] = 2.0F * (xy - wz);
+    m->m[1][1] = 1.0F - 2.0F * (xx +  zz);
+    m->m[1][2] = 2.0F * (yz + wx);
+    m->m[1][3] = 0.0F;
+
+    m->m[2][0] = 2.0F * (xz + wy);
+    m->m[2][1] = 2.0F * (yz - wx);
+    m->m[2][2] = 1.0F - 2.0F * (xx +  yy);
+    m->m[2][3] = 0.0F;
+
+    m->m[3][0] = 0.0F;
+    m->m[3][1] = 0.0F;
+    m->m[3][2] = 0.0F;
+    m->m[3][3] = 1.0F;
+}
+
+void cgm_mat4_set_identity(cgm_mat4* m) {
     for (int i = 0; i < 16; i++) {
         if (i % 5 == 0) {
             m->arr[i] = 1;
@@ -29,11 +69,11 @@ inline void cgm_mat4_set_identity(cgm_mat4* m) {
     }
 }
 
-inline cgm_mat4* cgm_mat4_cpy(cgm_mat4* dest, const cgm_mat4* src) {
+cgm_mat4* cgm_mat4_cpy(cgm_mat4* dest, const cgm_mat4* src) {
     return memcpy(dest, src, sizeof(cgm_mat4));
 }
 
-inline int cgm_mat4_equals(const cgm_mat4* a, const cgm_mat4* b) {
+bool cgm_mat4_equals(const cgm_mat4* a, const cgm_mat4* b) {
     for (int i = 0; i < 16; i++) {
         if (a->arr[i] != b->arr[i]) {
             return false;
@@ -43,25 +83,25 @@ inline int cgm_mat4_equals(const cgm_mat4* a, const cgm_mat4* b) {
     return true;
 }
 
-inline void cgm_mat4_add(cgm_mat4* a, const cgm_mat4* b) {
+void cgm_mat4_add(cgm_mat4* a, const cgm_mat4* b) {
     for (int i = 0; i < 16; i++) {
         a->arr[i] += b->arr[i];
     }
 }
 
-inline void cgm_mat4_sub(cgm_mat4* a, const cgm_mat4* b) {
+void cgm_mat4_sub(cgm_mat4* a, const cgm_mat4* b) {
     for (int i = 0; i < 16; i++) {
         a->arr[i] -= b->arr[i];
     }
 }
 
-inline void cgm_mat4_scal(cgm_mat4* m, float val) {
+void cgm_mat4_scal(cgm_mat4* m, float val) {
     for (int i = 0; i < 16; i++) {
         m->arr[i] *= val;
     }
 }
 
-inline void cgm_mat4_mul(cgm_mat4* out, const cgm_mat4* a, const cgm_mat4* b) {
+void cgm_mat4_mul(cgm_mat4* out, const cgm_mat4* a, const cgm_mat4* b) {
     cgm_mat4_fill(out, 0);
     for (int i = 0; i < 4; i++) {
         for (int k = 0; k < 4; k++) {
@@ -73,26 +113,26 @@ inline void cgm_mat4_mul(cgm_mat4* out, const cgm_mat4* a, const cgm_mat4* b) {
     }
 }
 
-inline void cgm_mat4_mul_l(cgm_mat4* a, const cgm_mat4* b) {
+void cgm_mat4_mul_l(cgm_mat4* a, const cgm_mat4* b) {
     cgm_mat4 out;
     cgm_mat4_mul(&out, a, b);
     cgm_mat4_cpy(a, &out);
 }
 
-inline void cgm_mat4_mul_r(const cgm_mat4* a, cgm_mat4* b) {
+void cgm_mat4_mul_r(const cgm_mat4* a, cgm_mat4* b) {
     cgm_mat4 out;
     cgm_mat4_mul(&out, a, b);
     cgm_mat4_cpy(b, &out);
 }
 
-inline void cgm_mat4_mul_v3(const cgm_mat4* m, cgm_vec3* v) {
+void cgm_mat4_mul_v3(const cgm_mat4* m, cgm_vec3* v) {
     float x = v->x, y = v->y, z = v->z;
     v->x = m->m[0][0] * x + m->m[1][0] * y + m->m[2][0] * z + m->m[3][0];
     v->y = m->m[0][1] * x + m->m[1][1] * y + m->m[2][1] * z + m->m[3][1];
     v->z = m->m[0][2] * x + m->m[1][2] * y + m->m[2][2] * z + m->m[3][2];
 }
 
-inline void cgm_mat4_mul_v4(const cgm_mat4* m, cgm_vec4* v) {
+void cgm_mat4_mul_v4(const cgm_mat4* m, cgm_vec4* v) {
     float x = v->x, y = v->y, z = v->z, w = v->w;
     v->x = m->m[0][0] * x + m->m[1][0] * y + m->m[2][0] * z + m->m[3][0] * w;
     v->y = m->m[0][1] * x + m->m[1][1] * y + m->m[2][1] * z + m->m[3][1] * w;
@@ -100,7 +140,13 @@ inline void cgm_mat4_mul_v4(const cgm_mat4* m, cgm_vec4* v) {
     v->w = m->m[0][3] * x + m->m[1][3] * y + m->m[2][3] * z + m->m[3][3] * w;
 }
 
-inline float cgm_mat4_det(const cgm_mat4* m) {
+void cgm_mat4_mul_quat(cgm_mat4* m, const cgm_quat* q) {
+    cgm_mat4 tmp;
+    cgm_mat4_set_quat(&tmp, q);
+    cgm_mat4_mul_l(m, &tmp);
+}
+
+float cgm_mat4_det(const cgm_mat4* m) {
     float sf0 = m->m[2][2] * m->m[3][3] - m->m[3][2] * m->m[2][3];
     float sf1 = m->m[2][1] * m->m[3][3] - m->m[3][1] * m->m[2][3];
     float sf2 = m->m[2][1] * m->m[3][2] - m->m[3][1] * m->m[2][2];
@@ -112,14 +158,14 @@ inline float cgm_mat4_det(const cgm_mat4* m) {
     float df1 = - (m->m[1][0] * sf0 - m->m[1][2] * sf3 + m->m[1][3] * sf4);
     float df2 = + (m->m[1][0] * sf1 - m->m[1][1] * sf3 + m->m[1][3] * sf5);
     float df3 = - (m->m[1][0] * sf2 - m->m[1][1] * sf4 + m->m[1][2] * sf5);
-   
+
     return m->m[0][0] * df0
-         + m->m[0][1] * df1
-         + m->m[0][2] * df2
-         + m->m[0][3] * df3;
+        + m->m[0][1] * df1
+        + m->m[0][2] * df2
+        + m->m[0][3] * df3;
 }
 
-inline void cgm_mat4_transpose(cgm_mat4* m) {
+void cgm_mat4_transpose(cgm_mat4* m) {
     for (int i = 0; i < 4; i++) {
         for (int j = i+1; j < 4; j++) {
             float tmp = m->m[i][j];
@@ -129,7 +175,7 @@ inline void cgm_mat4_transpose(cgm_mat4* m) {
     }
 }
 
-inline int cgm_mat4_invert(cgm_mat4* m) {
+int cgm_mat4_invert(cgm_mat4* m) {
     float d_23_01 = m->m[2][0] * m->m[3][1] - m->m[3][0] * m->m[2][1];
     float d_23_02 = m->m[2][0] * m->m[3][2] - m->m[3][0] * m->m[2][2];
     float d_23_03 = m->m[2][0] * m->m[3][3] - m->m[3][0] * m->m[2][3];
@@ -151,7 +197,7 @@ inline int cgm_mat4_invert(cgm_mat4* m) {
     inv.m[0][3] = - (m->m[2][1] * d_01_23 - m->m[2][2] * d_01_13 + m->m[2][3] * d_01_12);
 
     float det = m->m[0][0] * inv.m[0][0] + m->m[1][0] * inv.m[0][1] +
-                m->m[2][0] * inv.m[0][2] + m->m[3][0] * inv.m[0][3];
+        m->m[2][0] * inv.m[0][2] + m->m[3][0] * inv.m[0][3];
     if (det == 0) {
         return false;
     }
@@ -175,7 +221,7 @@ inline int cgm_mat4_invert(cgm_mat4* m) {
     cgm_mat4_cpy(m, &inv);
 }
 
-inline int cgm_mat4_fprintf(FILE* stream, const cgm_mat4* m) {
+int cgm_mat4_fprintf(FILE* stream, const cgm_mat4* m) {
     int len = 0;
     for (int i = 0; i < 4; i++) {
         len += fprintf(stream, "%g\t%g\t%g\t%g\n", m->m[i][0], m->m[i][1], m->m[i][2], m->m[i][3]);
@@ -184,7 +230,7 @@ inline int cgm_mat4_fprintf(FILE* stream, const cgm_mat4* m) {
     return len;
 }
 
-inline int cgm_mat4_printf(const cgm_mat4* m) {
+int cgm_mat4_printf(const cgm_mat4* m) {
     return cgm_mat4_fprintf(stdout, m);
 }
 

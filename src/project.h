@@ -11,8 +11,8 @@
 #ifndef PROJECT_H_
 #define PROJECT_H_
 
-#include "vec3.h"
-#include "mat4.h"
+#include "vector/vec3.h"
+#include "matrix/mat4.h"
 
 /**
  * Projects a vertex in model space to the vertex in window/screen coordinates.
@@ -41,8 +41,6 @@ void cgm_unproject(
         const cgm_mat4* projection,
         const int* view,
         const cgm_vec3* window);
-
-#include "project.inl"
 
 #endif /* PROJECT_H_ */
 

@@ -1,52 +1,50 @@
 /**
- * mat3.h
+ * dmat3.h
  *
  * Copyright (c) 2016 Zach Peltzer.
  * Subject to the MIT License.
  */
 
-#ifndef MAT3_H_
-#define MAT3_H_
+#ifndef DMAT3_H_
+#define DMAT3_H_
 
 #include <math.h>
 #include <stdio.h>
-#include <stdlib.h>
-#include <stirng.h>
 
-#include "vec3.h"
+#include "../vector/dvec3.h"
 
 /**
- * A 3x3 matrix with float elements.
+ * A 3x3 matrix with double elements.
  */
-typedef union cgm_mat3 {
+typedef union cgm_dmat3 {
     /**
-     * Row-major 3x3 2D float array representation of the matrix.
+     * Row-major 3x3 2D double array representation of the matrix.
      */
-    float m[3][3];
+    double m[3][3];
 
     /**
-     * Row-major 1D float array representation of the matrix.
+     * Row-major 1D double array representation of the matrix.
      */
-    float arr[9];
+    double arr[9];
 
     /**
-     * 1D Array of row cgm_vec3's of the matrix.
+     * 1D Array of row cgm_dvec3's of the matrix.
      */
-    cgm_vec3 vec[3];
-} cgm_mat3;
+    cgm_dvec3 vec[3];
+} cgm_dmat3;
 
 /**
- * Fills all elements of a cgm_mat3 with a value.
+ * Fills all elements of a cgm_dmat3 with a value.
  * @param m - Matrix to fill.
  * @param val - Value to fill with.
  */
-inline void cgm_mat3_fill(cgm_mat3* m, float val);
+void cgm_dmat3_fill(cgm_dmat3* m, double val);
 
 /**
- * Sets a cgm_mat3 to an identity matrix.
+ * Sets a cgm_dmat3 to an identity matrix.
  * @param m - Matrix to set.
  */
-inline void cgm_mat3_set_identity(cgm_mat3* m);
+void cgm_dmat3_set_identity(cgm_dmat3* m);
 
 /**
  * Copies a matrix into another.
@@ -54,91 +52,91 @@ inline void cgm_mat3_set_identity(cgm_mat3* m);
  * @param src - Source matrix.
  * @return dest.
  */
-inline cgm_mat3* cgm_mat3_cpy(cgm_mat3* dest, const cgm_mat3* src);
+cgm_dmat3* cgm_dmat3_cpy(cgm_dmat3* dest, const cgm_dmat3* src);
 
 /**
- * Tests if two cgm_mat3's are equal.
+ * Tests if two cgm_dmat3's are equal.
  * Two matrices are equal if all of their corresponding elements are equal.
  * @param a - First matrix.
  * @param b - Second matrix.
  * @return true (1) if a = b; false (0) otherwise.
  */
-inline int cgm_mat3_equals(const cgm_mat3* a, const cgm_mat3* b);
+bool cgm_dmat3_equals(const cgm_dmat3* a, const cgm_dmat3* b);
 
 /**
- * Adds two cgm_mat3's element-wise.
+ * Adds two cgm_dmat3's element-wise.
  * @param a - Matrix to add to.
  * @param b - Matrix to add.
  */
-inline void cgm_mat3_add(cgm_mat3* a, const cgm_mat3* b);
+void cgm_dmat3_add(cgm_dmat3* a, const cgm_dmat3* b);
 
 /**
- * Subtracts two cgm_mat3's element-wise.
+ * Subtracts two cgm_dmat3's element-wise.
  * @param a - Matrix to subtract from.
  * @param b - Matrix to subtract.
  */
-inline void cgm_mat3_sub(cgm_mat3* a, const cgm_mat3* b);
+void cgm_dmat3_sub(cgm_dmat3* a, const cgm_dmat3* b);
 
 /**
- * Scales each element of a cgm_mat3.
+ * Scales each element of a cgm_dmat3.
  * @param m - Matrix to scale.
  * @param val - Values to scale each element.
  */
-inline void cgm_mat3_scal(cgm_mat3* m, float val);
+void cgm_dmat3_scal(cgm_dmat3* m, double val);
 
 /**
- * Multiplies two cgm_mat3's.
+ * Multiplies two cgm_dmat3's.
  * @param out - Matrix to store the result.
  * @param a - Matrix to multiply on the left.
  * @param b - Matrix to multiply by on the right.
  */
-inline void cgm_mat3_mul(cgm_mat3* out, const cgm_mat3* a, const cgm_mat3* b);
+void cgm_dmat3_mul(cgm_dmat3* out, const cgm_dmat3* a, const cgm_dmat3* b);
 
 /**
- * Multiplies two cgm_mat3's.
+ * Multiplies two cgm_dmat3's.
  * @param a - Matrix to multiply on the left and store the result.
  * @param b - Matrix to multiply on the right.
  */
-inline void cgm_mat3_mul_l(cgm_mat3* a, const cgm_mat3* b);
+void cgm_dmat3_mul_l(cgm_dmat3* a, const cgm_dmat3* b);
 
 /**
- * Multiplies two cgm_mat3's.
+ * Multiplies two cgm_dmat3's.
  * @param a - Matrix to multiply on the left.
  * @param b - Matrix to multiply on the right and store the result.
  */
-inline void cgm_mat3_mul_r(const cgm_mat3* a, cgm_mat3* b);
+void cgm_dmat3_mul_r(const cgm_dmat3* a, cgm_dmat3* b);
 
 /**
- * Multiplies a cgm_vec3 by a cgm_mat3.
+ * Multiplies a cgm_dvec3 by a cgm_dmat3.
  * @param m - Matrix to multiply by (on the left).
  * @param v - Vector to multiply (on the right).
  */
-inline void cgm_mat3_mul_v3(const cgm_mat3* m, cgm_vec3* v);
+void cgm_dmat3_mul_v3(const cgm_dmat3* m, cgm_dvec3* v);
 
 /**
- * Calculates the determinant of a cgm_mat3.
+ * Calculates the determinant of a cgm_dmat3.
  * @param m - Matrix to take the determinant of.
  * @return Determinant |m|; NaN if m is NULL.
  */
-inline float cgm_mat3_det(const cgm_mat3* m);
+double cgm_dmat3_det(const cgm_dmat3* m);
 
 /**
- * Transposes a cgm_mat3.
+ * Transposes a cgm_dmat3.
  * @param m - Matrix to transpose.
  */
-inline void cgm_mat3_transpose(cgm_mat3* m);
+void cgm_dmat3_transpose(cgm_dmat3* m);
 
 /**
- * Inverts a cgm_mat3.
+ * Inverts a cgm_dmat3.
  * The (multiplicative) inverse of a matrix m is another matrix m' such that
  * m * m' = m' * m = I (identity matrix).
  * @param m - Matrix to invert.
  * @return true (1) if the matrix could be inverted; false (0) otherwise.
  */
-inline int cgm_mat3_invert(cgm_mat3* m);
+int cgm_dmat3_invert(cgm_dmat3* m);
 
 /**
- * Prints a cgm_mat3 to a stream.
+ * Prints a cgm_dmat3 to a stream.
  * The matrix is printed as:
  *      m00 m01 m02
  *      m10 m11 m12
@@ -148,18 +146,16 @@ inline int cgm_mat3_invert(cgm_mat3* m);
  * @param m - Matrix to print.
  * @return The number of characters printed.
  */
-inline int cgm_mat3_fprintf(FILE* stream, const cgm_mat3* m);
+int cgm_dmat3_fprintf(FILE* stream, const cgm_dmat3* m);
 
 /**
- * Prints a cmg_mat3 to stdout.
- * the matrix is printed as in cgm_mat3_fprintf().
+ * Prints a cmg_dmat3 to stdout.
+ * the matrix is printed as in cgm_dmat3_fprintf().
  * @param m - Matrix to print.
  * @return The number of characters printed.
  */
-inline int cgm_mat3_printf(const cgm_mat3* m);
+int cgm_dmat3_printf(const cgm_dmat3* m);
 
-#include "mat3.inl"
-
-#endif /* MAT3_H_ */
+#endif /* DMAT3_H_ */
 
 /* vim: set ft=c: */

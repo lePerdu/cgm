@@ -9,18 +9,8 @@
 #ifndef VEC2_H_
 #define VEC2_H_
 
+#include <stdbool.h>
 #include <stdio.h>
-
-/**
- * Returns a pointer to a compound literal cgm_vec2.
- * This should be primarily used as a function parameter
- * when one wants to avoid creating a new variable.
- * To set the values of a cgm_vec2, cgm_vec2_set() should be used instead.
- * @param X - x coordinate.
- * @param Y - y coordinate.
- * @return Constant pointer to cgm_vec2.
- */
-#define VEC2(X, Y)  ((const cgm_vec2*) &((cgm_vec2) {{(X), (Y)}}))
 
 /**
  * A 2-dimensional vector with float components.
@@ -47,19 +37,30 @@ typedef union cgm_vec2 {
 } cgm_vec2;
 
 /**
+ * Returns a pointer to a compound literal cgm_vec2.
+ * This should be primarily used as a function parameter
+ * when one wants to avoid creating a new variable.
+ * To set the values of a cgm_vec2, cgm_vec2_set() should be used instead.
+ * @param X - x coordinate.
+ * @param Y - y coordinate.
+ * @return Constant pointer to cgm_vec2.
+ */
+#define CGM_VEC2(X, Y)  ((const cgm_vec2*) &((cgm_vec2) {{(X), (Y)}}))
+
+/**
  * Sets the components of a cgm_vec2.
  * @param v - Vector to set.
  * @param x - x coordinate.
  * @param y - y coordinate.
  */
-inline void cgm_vec2_set(cgm_vec2* v, float x, float y);
+void cgm_vec2_set(cgm_vec2* v, float x, float y);
 
 /**
  * Fills both components of a cgm_vec2 with a value.
  * @param v - Vector to fill.
  * @param val - Value to fill with.
  */
-inline void cgm_vec2_fill(cgm_vec2* v, float val);
+void cgm_vec2_fill(cgm_vec2* v, float val);
 
 /**
  * Copies src into dest.
@@ -67,7 +68,7 @@ inline void cgm_vec2_fill(cgm_vec2* v, float val);
  * @param src - Source vector.
  * @return dest.
  */
-inline cgm_vec2* cgm_vec2_cpy(cgm_vec2* dest, const cgm_vec2* src);
+cgm_vec2* cgm_vec2_cpy(cgm_vec2* dest, const cgm_vec2* src);
 
 /**
  * Tests if two cgm_vec2's are equal.
@@ -77,14 +78,14 @@ inline cgm_vec2* cgm_vec2_cpy(cgm_vec2* dest, const cgm_vec2* src);
  * @param v - Second vector.
  * @return true(1) if u = v, false(0) otherwise.
  */
-inline int cgm_vec2_equals(const cgm_vec2* u, const cgm_vec2* v);
+bool cgm_vec2_equals(const cgm_vec2* u, const cgm_vec2* v);
 
 /**
  * Adds a value to each component of the vector.
  * @param v - Vector to add to.
  * @param n - Value to add.
  */
-inline void cgm_vec2_nadd(cgm_vec2* v, float n);
+void cgm_vec2_nadd(cgm_vec2* v, float n);
 
 /**
  * Adds two cgm_vec2's component-wise.
@@ -92,7 +93,7 @@ inline void cgm_vec2_nadd(cgm_vec2* v, float n);
  * @param u - Vector to add to.
  * @param v - Vector to add.
  */
-inline void cgm_vec2_add(cgm_vec2* u, const cgm_vec2* v);
+void cgm_vec2_add(cgm_vec2* u, const cgm_vec2* v);
 
 /**
  * Subtracts two cgm_vec2's component-wise.
@@ -100,7 +101,7 @@ inline void cgm_vec2_add(cgm_vec2* u, const cgm_vec2* v);
  * @param u - Vector to subtract from.
  * @param v - Vector to subtract.
  */
-inline void cgm_vec2_sub(cgm_vec2* u, const cgm_vec2* v);
+void cgm_vec2_sub(cgm_vec2* u, const cgm_vec2* v);
 
 /**
  * Returns the dot product of two cgm_vec2's.
@@ -109,7 +110,7 @@ inline void cgm_vec2_sub(cgm_vec2* u, const cgm_vec2* v);
  * @param v - Secont vector.
  * @return Dot product u . v.
  */
-inline float cgm_vec2_dot(const cgm_vec2* u, const cgm_vec2* v);
+float cgm_vec2_dot(const cgm_vec2* u, const cgm_vec2* v);
 
 /**
  * Multiplies a cgm_vec2 by a scalar.
@@ -117,14 +118,14 @@ inline float cgm_vec2_dot(const cgm_vec2* u, const cgm_vec2* v);
  * @param v - Vector to scale.
  * @param val - Scale factor.
  */
-inline void cgm_vec2_scal(cgm_vec2* v, float val);
+void cgm_vec2_scal(cgm_vec2* v, float val);
 
 /**
  * Returns the magnitude of a cgm_vec2.
  * @param v - Vector to take the magnitude of.
  * @return Magnitude ||v||.
  */
-inline float cgm_vec2_mag(const cgm_vec2* v);
+float cgm_vec2_mag(const cgm_vec2* v);
 
 /**
  * Normalizes a cgm_vec2.
@@ -133,7 +134,7 @@ inline float cgm_vec2_mag(const cgm_vec2* v);
  * If the vector has a magnitude of 0, no operation is performed.
  * @param v - Vector to normalize.
  */
-inline void cgm_vec2_norm(cgm_vec2* v);
+void cgm_vec2_norm(cgm_vec2* v);
 
 /**
  * Prints a cgm_vec2 to a stream.
@@ -142,7 +143,7 @@ inline void cgm_vec2_norm(cgm_vec2* v);
  * @param v - Vector to print.
  * @return The number of characters printed.
  */
-inline int cgm_vec2_fprintf(FILE* stream, const cgm_vec2* v);
+int cgm_vec2_fprintf(FILE* stream, const cgm_vec2* v);
 
 /**
  * Prints a cmg_vec2 to stdout.
@@ -150,9 +151,7 @@ inline int cgm_vec2_fprintf(FILE* stream, const cgm_vec2* v);
  * @param m - Matrix to print.
  * @return The number of characters printed.
  */
-inline int cgm_vec2_printf(const cgm_vec2* v);
-
-#include "vec2.inl"
+int cgm_vec2_printf(const cgm_vec2* v);
 
 #endif /* VEC2_H_ */
 
